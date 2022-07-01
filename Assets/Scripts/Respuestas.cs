@@ -48,13 +48,22 @@ public class Respuestas : MonoBehaviour
         switch (ex)
         {
             case exercise.uno:
+                ShowVector(nameof(vectorA));
                 vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
+                VectorDebugger.UpdatePosition(nameof(vectorA), vectorA);
                 break;
             case exercise.dos:
-                List<Vector3> newPositions2 = new List<Vector3>();
-                for (int index = 0; index < VectorDebugger.GetVectorsPositions("2").Count; ++index)
-                    newPositions2.Add(Quaternion.Euler(new Vector3(0.0f, this.angle, 0.0f)) * VectorDebugger.GetVectorsPositions("2")[index]);
-                VectorDebugger.UpdatePositionsSecuence("2", newPositions2);
+                ShowVector(nameof(vectorA));
+                ShowVector(nameof(vectorB));
+                ShowVector(nameof(vectorC));
+
+                vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
+                vectorB = Quat.Euler(new Vec3(0, angle, 0)) * vectorB;
+                vectorC = Quat.Euler(new Vec3(0, angle, 0)) * vectorC;
+
+                VectorDebugger.UpdatePosition(nameof(vectorA), vectorA);
+                VectorDebugger.UpdatePosition(nameof(vectorB), vectorA, vectorB);
+                VectorDebugger.UpdatePosition(nameof(vectorC), vectorB, vectorC);
                 break;
             case exercise.tres:
                 break;
@@ -62,4 +71,11 @@ public class Respuestas : MonoBehaviour
                 break;
         }
     }
+
+    private void ShowVector(string key)
+    {
+        VectorDebugger.TurnOnVector(key);
+        VectorDebugger.EnableEditorView(key);
+    }
 }
+
