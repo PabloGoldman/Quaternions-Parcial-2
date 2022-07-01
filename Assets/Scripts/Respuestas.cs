@@ -17,6 +17,11 @@ public class Respuestas : MonoBehaviour
 
     public float angle;
 
+    Vec3 vectorA = new Vec3(10, 0, 0);
+    Vec3 vectorB = new Vec3(10, 10, 0);
+    Vec3 vectorC = new Vec3(20, 10, 0);
+    Vec3 vectorD = new Vec3(20, 20, 0);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,11 +48,7 @@ public class Respuestas : MonoBehaviour
         switch (ex)
         {
             case exercise.uno:
-                List<Vector3> newPositions1 = new List<Vector3>();
-                for (int i = 0; i < VectorDebugger.GetVectorsPositions("1").Count; ++i)
-                {
-                    newPositions1.Add(Quaternion.Euler(new Vector3(0.0f, angle, 0.0f)) * VectorDebugger.GetVectorsPositions("1")[i]);
-                }
+                vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
                 break;
             case exercise.dos:
                 List<Vector3> newPositions2 = new List<Vector3>();

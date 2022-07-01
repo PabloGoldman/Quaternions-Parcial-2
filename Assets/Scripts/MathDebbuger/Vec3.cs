@@ -215,12 +215,16 @@ namespace CustomMath
             y *= scale.y;
             z *= scale.z;
         }
-        public void Normalize()
+
+        public static Vec3 Normalize(Vec3 vec3)
         {
-            float mag = this.magnitude;
-            this.x /= mag;
-            this.y /= mag;
-            this.z /= mag;
+            float num = Magnitude(vec3);
+            if (num > epsilon)
+            {
+                return vec3 / num;
+            }
+
+            return Zero;
         }
         #endregion
 
