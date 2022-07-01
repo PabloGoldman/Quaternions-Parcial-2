@@ -48,14 +48,14 @@ public class Respuestas : MonoBehaviour
         switch (ex)
         {
             case exercise.uno:
-                ShowVector(nameof(vectorA));
+                DisplayVectors(nameof(vectorA));
                 vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
                 VectorDebugger.UpdatePosition(nameof(vectorA), vectorA);
                 break;
             case exercise.dos:
-                ShowVector(nameof(vectorA));
-                ShowVector(nameof(vectorB));
-                ShowVector(nameof(vectorC));
+                DisplayVectors(nameof(vectorA));
+                DisplayVectors(nameof(vectorB));
+                DisplayVectors(nameof(vectorC));
 
                 vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
                 vectorB = Quat.Euler(new Vec3(0, angle, 0)) * vectorB;
@@ -66,13 +66,25 @@ public class Respuestas : MonoBehaviour
                 VectorDebugger.UpdatePosition(nameof(vectorC), vectorB, vectorC);
                 break;
             case exercise.tres:
+                DisplayVectors(nameof(vectorA));
+                DisplayVectors(nameof(vectorB));
+                DisplayVectors(nameof(vectorC));
+                DisplayVectors(nameof(vectorD));
+
+                vectorA = Quat.Euler(new Vec3(angle, angle, 0)) * vectorA;
+                vectorC = Quat.Euler(new Vec3(-angle, -angle, 0)) * vectorC;
+
+                VectorDebugger.UpdatePosition(nameof(vectorA), vectorA);
+                VectorDebugger.UpdatePosition(nameof(vectorB), vectorA, vectorB);
+                VectorDebugger.UpdatePosition(nameof(vectorC), vectorB, vectorC);
+                VectorDebugger.UpdatePosition(nameof(vectorD), vectorC, vectorD);
                 break;
             default:
                 break;
         }
     }
 
-    private void ShowVector(string key)
+    private void DisplayVectors(string key)
     {
         VectorDebugger.TurnOnVector(key);
         VectorDebugger.EnableEditorView(key);
