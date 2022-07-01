@@ -28,22 +28,14 @@ public class Respuestas : MonoBehaviour
         VectorDebugger.EnableCoordinates();
         VectorDebugger.EnableEditorView();
 
-        VectorDebugger.AddVector(new Vector3(10f, 0.0f, 0.0f), Color.red, "1");
-        List<Vector3> positions1 = new List<Vector3>();
-        positions1.Add(new Vector3(10f, 0.0f, 0.0f));
-        positions1.Add(new Vector3(10f, 10f, 0.0f));
-        positions1.Add(new Vector3(20f, 10f, 0.0f));
-        VectorDebugger.AddVectorsSecuence(positions1, false, Color.blue, "2");
-        List<Vector3> positions2 = new List<Vector3>();
-        positions2.Add(new Vector3(10f, 0.0f, 0.0f));
-        positions2.Add(new Vector3(10f, 10f, 0.0f));
-        positions2.Add(new Vector3(20f, 10f, 0.0f));
-        positions2.Add(new Vector3(20f, 20f, 0.0f));
-        VectorDebugger.AddVectorsSecuence(positions2, false, Color.yellow, "3");
+        VectorDebugger.AddVector(Vector3.zero, vectorA, Color.green, nameof(vectorA));
+        VectorDebugger.AddVector(vectorA, vectorB, Color.green, nameof(vectorB));
+        VectorDebugger.AddVector(vectorB, vectorC, Color.blue, nameof(vectorC));
+        VectorDebugger.AddVector(vectorC, vectorD, Color.cyan, nameof(vectorD));
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         switch (ex)
         {
