@@ -209,25 +209,25 @@ namespace CustomMath
         public static Quat Slerp(Quat a, Quat b, float t) => SlerpUnclamped(a, b, Mathf.Clamp01(t));
 
         //Interpola esféricamente entre a y b por t. El parámetro t no está sujeto.
-        
+
         public static Quat SlerpUnclamped(Quat a, Quat b, float t)
         {
             Quat r;
 
             float time = 1 - t;
 
-            float wa, wb;
+            float wa, wb; //punto de origen y final
 
             float theta = Mathf.Acos(Dot(a, b)); //Con coseno sacas la parte real del Quat, con arcoseno, a partir de la w sacas el angulo
 
             if (theta < 0)
             {
-                theta = -theta;
+                theta = -theta; //Lo invertis, o sea si tenes -30 grados, seria 30 grados
             }
 
             float sn = Mathf.Sin(theta);
 
-            wa = Mathf.Sin(time * theta) / sn;
+            wa = Mathf.Sin(time * theta) / sn; 
             wb = Mathf.Sin((1 - time) * theta) / sn;
 
             r.x = wa * a.x + wb * b.x;
@@ -250,7 +250,7 @@ namespace CustomMath
             // Cuando se consigue eso se calcula el arco coseno en radianes.
             // Se realizan las multiplicaciones para conseguir el angulo en grados.
 
-            return IsEqualUsingDot(dot) ? 0f : (Mathf.Acos(Mathf.Min(Mathf.Abs(dot), 1f)) * 2f * Mathf.Rad2Deg); //Al arcoseno no podes darle un num mayor a 0
+            return IsEqualUsingDot(dot) ? 0f : (Mathf.Acos(Mathf.Min(Mathf.Abs(dot), 1f)) * 2f * Mathf.Rad2Deg);
         }
 
         private static bool IsEqualUsingDot(float dot) => dot > 0.999999f; // uso este numero constante para darle un margen a la presicion flotante.
@@ -259,9 +259,14 @@ namespace CustomMath
         public static float Dot(Quat a, Quat b) => a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 
         // From https://stackoverflow.com/questions/12435671/quaternion-lookat-function
-        public static Quat LookRotation(Vec3 forward, Vec3 upwards)
+
+        //Forward es el eje z
+        //Forma una rotación que parte desde la identidad, hasta forward, teniendo en cuenta, cuál es el vector que se utiliza como ortogonal a donde se está mirando.
+        //generalmente, el vector ortogonal que se usa, es el up (0,1,0);
+
+        public static Quat LookRotation(Vec3 sourcePoint, Vec3 destPoint)  //El forward y el up, el up es nuestra direccion que queremos apuntar
         {
-            Vec3 dir = Vec3.Normalize(upwards - forward);
+            Vec3 dir = Vec3.Normalize(destPoint - sourcePoint);
             Vec3 rotAxis = Vec3.Cross(Vec3.Forward, dir);
             float dot = Vec3.Dot(Vec3.Forward, dir);
 
@@ -269,7 +274,8 @@ namespace CustomMath
             result.x = rotAxis.x;
             result.y = rotAxis.y;
             result.z = rotAxis.z;
-            result.w = dot + 1;
+
+            result.w = dot + 1; //Se hace el +1 ya que, sino, vas a tener el quat con el doble de rotacion 
 
             return result.Normalized;
         }
