@@ -44,12 +44,7 @@ namespace CustomMath
 
         public static bool operator !=(Quat lhs, Quat rhs) => !(lhs == rhs);
 
-        /// <summary>
-        /// Multiplicacion de <see cref="Quat"/>
-        /// </summary>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
-        /// <returns></returns>
+        //Multiplicacion de Quat
         public static Quat operator *(Quat lhs, Quat rhs)
         {
             float w = lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z; // Real
@@ -57,16 +52,11 @@ namespace CustomMath
             float y = lhs.w * rhs.y + lhs.y * rhs.w + lhs.z * rhs.x - lhs.x * rhs.z; // imaginario J
             float z = lhs.w * rhs.z + lhs.z * rhs.w + lhs.x * rhs.y - lhs.y * rhs.x; // imaginario K
 
-            return new Quat(x, y, z, w); // Choclo final xD
+            return new Quat(x, y, z, w);
         }
 
-        /// <summary>
-        /// Multiplica el <see cref="Quat"/> con el <see cref="Vec3"/>
-        /// y devuelve una copia del <see cref="Vec3"/> con la rotacion del <see cref="Quat"/>
-        /// </summary>
-        /// <param name="rotation"></param>
-        /// <param name="point"></param>
-        /// <returns></returns>
+        //Multiplica el Quaternion con un vec3
+        //y devuelve una copia del Vec3 con la rotacion del Quat
         public static Vec3 operator *(Quat rotation, Vec3 point)
         {
             float rotX = rotation.x * 2f;
@@ -108,10 +98,7 @@ namespace CustomMath
 
         #region Functions
 
-        /// <summary>
-        /// Devuelve los angulos de euler de un <see cref="Quat"/>
-        /// y tambien se le puede asignar un <see cref="Vec3"/> como angulos
-        /// </summary>
+        //Devuelve los angulos de euler de un Quat
         public Vec3 EulerAngles
         {
             get => ToEulerAngles(this) * Mathf.Rad2Deg;
@@ -119,9 +106,7 @@ namespace CustomMath
             set => this = ToQuaternion(value * Mathf.Deg2Rad);
         }
 
-        /// <summary>
-        /// Devuelve una copia del Quat ya normalizado.
-        /// </summary>
+        //Devuelve una copia del Quat ya normalizado.
         public Quat Normalized => Normalize(this);
 
         public static Quat Euler(float x, float y, float z) => ToQuaternion(new Vec3(x, y, z) * Mathf.Deg2Rad);
@@ -129,11 +114,7 @@ namespace CustomMath
         //public static Quat Euler(Vec3 euler) => ToQuaternion(euler * Mathf.Deg2Rad);
         public static Quat Euler(Vec3 euler) => ToQuaternion(euler);
 
-        /// <summary>
-        /// Transforma el <see cref="Vec3"/> en un <see cref="Quat"/>.
-        /// </summary>
-        /// <param name="vec3"></param>
-        /// <returns></returns>
+        //De vec3 a Quat
         private static Quat ToQuaternion(Vec3 vec3) // yaw (Z), pitch (Y), roll (X)
         {
             float cz = Mathf.Cos(Mathf.Deg2Rad * vec3.z / 2);
@@ -142,20 +123,6 @@ namespace CustomMath
             float sy = Mathf.Sin(Mathf.Deg2Rad * vec3.y / 2);
             float cx = Mathf.Cos(Mathf.Deg2Rad * vec3.x / 2);
             float sx = Mathf.Sin(Mathf.Deg2Rad * vec3.x / 2);
-
-            //Quat rotZ = Quat.Identity;
-            //rotZ.w = cz; // Real
-            //rotZ.z = sz; // Imaginario
-
-            //Quat rotX = Quat.Identity;
-            //rotX.w = cx; // Real
-            //rotX.x = sx; // Imaginario
-
-            //Quat rotY = Quat.Identity;
-            //rotY.w = cy; // Real
-            //rotY.y = sy; // Imaginario
-
-            //return rotX * rotY * rotZ;
 
             Quat quat = new Quat();
 
@@ -167,12 +134,7 @@ namespace CustomMath
             return quat;
         }
 
-        /// <summary>
-        /// Transforma el <see cref="Quat"/> en un <see cref="Vec3"/>.
-        /// (En radianes)
-        /// </summary>
-        /// <param name="quat"></param>
-        /// <returns></returns>
+        //De quat a vec3
         private static Vec3 ToEulerAngles(Quat quat)
         {
             Vec3 angles;
@@ -198,11 +160,7 @@ namespace CustomMath
         }
 
 
-        /// <summary>
-        /// Invierte la rotacion del quaternion.
-        /// </summary>
-        /// <param name="rotation">Quaternion que queremos invertir.</param>
-        /// <returns></returns>
+        //Invierte la rotacion del quaternion.
         public static Quat Inverse(Quat rotation)
         {
             Quat q;
@@ -213,11 +171,7 @@ namespace CustomMath
             return q;
         }
 
-        /// <summary>
-        /// Devuelve un <see cref="Quat"/> normalizado.
-        /// </summary>
-        /// <param name="quat">Quaternion que queremos normalizar.</param>
-        /// <returns></returns>
+        //Devuelve un quat normalizado.
         public static Quat Normalize(Quat quat)
         {
             float sqrtDot = Mathf.Sqrt(Dot(quat, quat));
@@ -230,9 +184,7 @@ namespace CustomMath
             return new Quat(quat.x / sqrtDot, quat.y / sqrtDot, quat.z / sqrtDot, quat.w / sqrtDot);
         }
 
-        /// <summary>
-        /// Normaliza el Quat.
-        /// </summary>
+        //Normaliza el Quat.
         public void Normalize() => this = Normalize(this);
 
         public static Quat Lerp(Quat a, Quat b, float t) => LerpUnclamped(a, b, Mathf.Clamp01(t));
@@ -253,22 +205,11 @@ namespace CustomMath
 
         // https://www.youtube.com/watch?v=dttFiVn0rvc&list=PLW3Zl3wyJwWNWsJIPZrmY19urkYHXOH3N
 
-        /// <summary>
-        /// Interpola esféricamente entre los <see cref="Quat"/> a y b por t. El parámetro t está sujeto al rango [0, 1].
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        //Interpola esféricamente entre a y b por t. El parámetro t está sujeto al rango [0, 1].
         public static Quat Slerp(Quat a, Quat b, float t) => SlerpUnclamped(a, b, Mathf.Clamp01(t));
 
-        /// <summary>
-        /// Interpola esféricamente entre a y b por t. El parámetro t no está sujeto.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        //Interpola esféricamente entre a y b por t. El parámetro t no está sujeto.
+        
         public static Quat SlerpUnclamped(Quat a, Quat b, float t)
         {
             Quat r;
@@ -277,9 +218,12 @@ namespace CustomMath
 
             float wa, wb;
 
-            float theta = Mathf.Acos(Dot(a, b));
+            float theta = Mathf.Acos(Dot(a, b)); //Con coseno sacas la parte real del Quat, con arcoseno, a partir de la w sacas el angulo
 
-            if (theta < 0) theta = -theta;
+            if (theta < 0)
+            {
+                theta = -theta;
+            }
 
             float sn = Mathf.Sin(theta);
 
@@ -296,12 +240,7 @@ namespace CustomMath
             return r;
         }
 
-        /// <summary>
-        /// Devuelve el angulo en tre 2 <see cref="Quat"/> en grados.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        //Devuelve el angulo entre 2 Quat en grados.
         public static float Angle(Quat a, Quat b)
         {
             // Se calcula el producto punto para saber si los quaterniones tienen la misma orientacion, si la tienen entonces el angulo es 0.
@@ -311,17 +250,12 @@ namespace CustomMath
             // Cuando se consigue eso se calcula el arco coseno en radianes.
             // Se realizan las multiplicaciones para conseguir el angulo en grados.
 
-            return IsEqualUsingDot(dot) ? 0f : (Mathf.Acos(Mathf.Min(Mathf.Abs(dot), 1f)) * 2f * Mathf.Rad2Deg);
+            return IsEqualUsingDot(dot) ? 0f : (Mathf.Acos(Mathf.Min(Mathf.Abs(dot), 1f)) * 2f * Mathf.Rad2Deg); //Al arcoseno no podes darle un num mayor a 0
         }
 
         private static bool IsEqualUsingDot(float dot) => dot > 0.999999f; // uso este numero constante para darle un margen a la presicion flotante.
 
-        /// <summary>
-        /// Devuelve el producto Punto entre 2 <see cref="Quat"/>.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        //Devuelve el producto Punto entre 2 quat
         public static float Dot(Quat a, Quat b) => a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 
         // From https://stackoverflow.com/questions/12435671/quaternion-lookat-function

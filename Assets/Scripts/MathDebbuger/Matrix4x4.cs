@@ -7,26 +7,6 @@ namespace CustomMath
 {
     public struct Matrix4x4
     {
-        /*
-            *Variables
-            *Constructor
-            *this[index]
-            *this[row, colum]
-            *transpose
-            *rotation
-            *lossyscale
-            *Rotate
-            *Scale
-            *Translate
-            *Transpose
-            *TRS
-            *ToString
-            *Matrix4x4 * Matrix4x4
-            *Matrix4x4 * Vector4
-            *Matrix4x4 == Matrix4x4
-            *Matrix4x4 != Matrix4x4
-         */
-
         #region Variables
 
         public float m00;
