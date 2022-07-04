@@ -270,7 +270,7 @@ namespace CustomMath
         {
             Vec3 dir = Vec3.Normalize(destPoint - sourcePoint);
             Vec3 rotAxis = Vec3.Cross(Vec3.Forward, dir);
-            float dot = Vec3.Dot(Vec3.Forward, dir);
+            float dot = Vec3.Dot(Vec3.Forward, dir);                 //HAY PAINT Y DEMOSTRACION EN EN UNITY
 
             Quat result;
             result.x = rotAxis.x;
@@ -286,14 +286,14 @@ namespace CustomMath
 
         public static Quat RotateTowards(Quat from, Quat to, float maxDegreesDelta)
         {
-            float angle = Angle(from, to);
+            float angle = Angle(from, to);    //Sacas el angulo del punto en el que estas, al que queres ir
 
-            if (angle == 0f)
+            if (angle == 0f)                  //Si vale 0, estas en el lugar
             {
                 return to;
             }
 
-            return SlerpUnclamped(from, to, Mathf.Min(1f, maxDegreesDelta / angle));
+            return SlerpUnclamped(from, to, Mathf.Min(1f, maxDegreesDelta / angle));  //Slerpeas con los valores
         }
 
         #endregion
