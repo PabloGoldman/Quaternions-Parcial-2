@@ -45,7 +45,7 @@ namespace CustomMath
         public static bool operator !=(Quat lhs, Quat rhs) => !(lhs == rhs);
 
         //Multiplicacion de Quat
-        public static Quat operator *(Quat lhs, Quat rhs)
+        public static Quat operator *(Quat lhs, Quat rhs) //HAY DEMOSTRACION EN UNITY
         {
             float w = lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z; // Real
             float x = lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y; // imaginario I
@@ -53,7 +53,7 @@ namespace CustomMath
             float z = lhs.w * rhs.z + lhs.z * rhs.w + lhs.x * rhs.y - lhs.y * rhs.x; // imaginario K
 
             return new Quat(x, y, z, w);
-        }
+        } 
 
         //Multiplica el Quaternion con un vec3
         //y devuelve una copia del Vec3 con la rotacion del Quat
@@ -204,8 +204,6 @@ namespace CustomMath
 
             return r;
         }
-
-        // https://www.youtube.com/watch?v=dttFiVn0rvc&list=PLW3Zl3wyJwWNWsJIPZrmY19urkYHXOH3N
 
         //Interpola esféricamente entre a y b por t. El parámetro t está sujeto al rango [0, 1].
         public static Quat Slerp(Quat a, Quat b, float t) => SlerpUnclamped(a, b, Mathf.Clamp01(t));
