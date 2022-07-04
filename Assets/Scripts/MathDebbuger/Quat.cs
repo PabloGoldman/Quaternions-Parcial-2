@@ -42,25 +42,25 @@ namespace CustomMath
 
         public static bool operator ==(Quat lhs, Quat rhs) => IsEqualUsingDot(Dot(lhs, rhs));
 
-        public static bool operator !=(Quat lhs, Quat rhs) => !(lhs == rhs);
+        public static bool operator !=(Quat lhs, Quat rhs) => !IsEqualUsingDot(Dot(lhs, rhs));
 
         //Multiplicacion de Quat
         public static Quat operator *(Quat lhs, Quat rhs) //HAY DEMOSTRACION EN UNITY
-        {
+        {   //El eje w multiplica 
             float w = lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z; // Real
             float x = lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y; // imaginario I
             float y = lhs.w * rhs.y + lhs.y * rhs.w + lhs.z * rhs.x - lhs.x * rhs.z; // imaginario J
             float z = lhs.w * rhs.z + lhs.z * rhs.w + lhs.x * rhs.y - lhs.y * rhs.x; // imaginario K
 
             return new Quat(x, y, z, w);
-        } 
+        }
 
         //Multiplica el Quaternion con un vec3
         //y devuelve una copia del Vec3 con la rotacion del Quat
         public static Vec3 operator *(Quat rotation, Vec3 point)
         {
             float rotX = rotation.x * 2f;
-            float rotY = rotation.y * 2f;
+            float rotY = rotation.y * 2f;           //es el eje de rotacion principal
             float rotZ = rotation.z * 2f;
 
             float rotX2 = rotation.x * rotX;
@@ -68,7 +68,7 @@ namespace CustomMath
             float rotZ2 = rotation.z * rotZ;
 
             float rotXY = rotation.x * rotY;
-            float rotXZ = rotation.x * rotZ;
+            float rotXZ = rotation.x * rotZ;         //Son los planos con los que vas a rotar
             float rotYZ = rotation.y * rotZ;
 
             float rotWX = rotation.w * rotX;
@@ -77,11 +77,11 @@ namespace CustomMath
 
             Vec3 result = Vec3.Zero;
 
-            result.x = (1f - (rotY2 + rotZ2)) * point.x + (rotXY - rotWZ) * point.y + (rotXZ + rotWY) * point.z;
+            result.x = (1f - (rotY2 + rotZ2)) * point.x + (rotXY - rotWZ) * point.y + (rotXZ + rotWY) * point.z;  //Se rotan los ejes ignorando uno de los ejes(el suyo)
             result.y = (rotXY + rotWZ) * point.x + (1f - (rotX2 + rotZ2)) * point.y + (rotYZ - rotWX) * point.z;
             result.z = (rotXZ - rotWY) * point.x + (rotYZ + rotWX) * point.y + (1f - (rotX2 + rotY2)) * point.z;
 
-            return result;
+            return result;  //Se calcula el vector unitario
         }
 
         public static implicit operator Quaternion(Quat quat)
@@ -116,40 +116,40 @@ namespace CustomMath
         //De vec3 a Quat
         private static Quat ToQuaternion(Vec3 vec3) // yaw (Z), pitch (Y), roll (X)
         {
-            float cz = Mathf.Cos(Mathf.Deg2Rad * vec3.z / 2);   //La parte real del Quat se calcula con el coseno de la mitad del angulo, pasado a radianes 
-            float sz = Mathf.Sin(Mathf.Deg2Rad * vec3.z / 2);   //xq asi laburan los Quat
+            float cosZ = Mathf.Cos(Mathf.Deg2Rad * vec3.z / 2);   //La parte real del Quat se calcula con el coseno de la mitad del angulo, pasado a radianes 
+            float sinZ = Mathf.Sin(Mathf.Deg2Rad * vec3.z / 2);   //xq asi laburan los Quat
 
-            float cy = Mathf.Cos(Mathf.Deg2Rad * vec3.y / 2);   //La parte imaginaria se calcula con el seno
-            float sy = Mathf.Sin(Mathf.Deg2Rad * vec3.y / 2);   
+            float cosY = Mathf.Cos(Mathf.Deg2Rad * vec3.y / 2);   //La parte imaginaria se calcula con el seno
+            float sinY = Mathf.Sin(Mathf.Deg2Rad * vec3.y / 2);
 
-            float cx = Mathf.Cos(Mathf.Deg2Rad * vec3.x / 2);  //Estas son las rotaciones de cada eje
-            float sx = Mathf.Sin(Mathf.Deg2Rad * vec3.x / 2);
+            float cosX = Mathf.Cos(Mathf.Deg2Rad * vec3.x / 2);  //Estas son las rotaciones de cada eje
+            float sinX = Mathf.Sin(Mathf.Deg2Rad * vec3.x / 2);
 
-            Quat quat = new Quat();    
+            Quat quat = new Quat();
 
-            quat.w = cx * cy * cz + sx * sy * sz;   //Se le agregan las rotaciones de cada eje, multiplicandolas, ya que es la forma de aplicar rotaciones
-            quat.x = sx * cy * cz - cx * sy * sz;   
-            quat.y = cx * sy * cz + sx * cy * sz;
-            quat.z = cx * cy * sz - sx * sy * cz;
+            quat.w = cosX * cosY * cosZ + sinX * sinY * sinZ;   //Se le agregan las rotaciones de cada eje, multiplicandolas, ya que es la forma de aplicar rotaciones
+            quat.x = sinX * cosY * cosZ - cosX * sinY * sinZ;   //imaginario
+            quat.y = cosX * sinY * cosZ + sinX * cosY * sinZ;   //imaginario
+            quat.z = cosX * cosY * sinZ - sinX * sinY * cosZ;   //imaginario
 
             return quat;
         }
 
-        //De quat a vec3
+        //Lo sacamo de wikipedia xd
         private static Vec3 ToEulerAngles(Quat quat) //Si no me equivoco, el de unity tiene gimbal lock
         {
             Vec3 angles;
 
             // roll (x-axis rotation)
-            float sinr_cosp = 2 * (quat.w * quat.x + quat.y * quat.z);
-            float cosr_cosp = 1 - 2 * (quat.x * quat.x + quat.y * quat.y);
-            angles.x = Mathf.Atan2(sinr_cosp, cosr_cosp);
-
+            float sinr_cosp = 2 * (quat.w * quat.x + quat.y * quat.z);  //Sacas el imaginario
+            float cosr_cosp = 1 - 2 * (quat.x * quat.x + quat.y * quat.y);  //Sacas el real
+            angles.x = Mathf.Atan2(sinr_cosp, cosr_cosp);  //Sacas el angulo
+             
             // pitch (y-axis rotation)
             float sinp = 2 * (quat.w * quat.y - quat.z * quat.x);    //Ojo por el gimbal lock (EXPLICO EN UNITY)
 
             if (Mathf.Abs(sinp) >= 1)
-                angles.y = (Mathf.PI / 2) * Mathf.Sign(sinp); // use 90 degrees if out of range
+                angles.y = (Mathf.PI / 2) * Mathf.Sign(sinp); //Chequeo de singularidades
             else
                 angles.y = Mathf.Asin(sinp);
 
@@ -160,7 +160,6 @@ namespace CustomMath
 
             return angles;
         }
-
 
         //Invierte la rotacion del quaternion.
         public static Quat Inverse(Quat rotation)
@@ -194,7 +193,7 @@ namespace CustomMath
         public static Quat LerpUnclamped(Quat a, Quat b, float t)
         {
             Quat r;
-            float time = 1 - t;
+            float time = 1 - t; //Se averigua el tiempo restante 
             r.x = time * a.x + t * b.x;
             r.y = time * a.y + t * b.y;
             r.z = time * a.z + t * b.z;
@@ -214,7 +213,7 @@ namespace CustomMath
         {
             Quat r;
 
-            float time = 1 - t;
+            float time = 1 - t;  //Se averigua el tiempo restante 
 
             float wa, wb; //punto de origen y final
 
@@ -222,13 +221,13 @@ namespace CustomMath
 
             if (theta < 0)
             {
-                theta = -theta; //Lo invertis, o sea si tenes -30 grados, seria 30 grados, sacas el absoluto
+                theta = -theta; //Lo invertis, o sea si tenes -30 grados, seria 30 grados, sacas el absoluto, busca el angulo mas chico posible
             }
 
-            float sn = Mathf.Sin(theta);
+            float sn = Mathf.Sin(theta);                  //Sacas el seno de theta
 
-            wa = Mathf.Sin(time * theta) / sn;   
-            wb = Mathf.Sin((1 - time) * theta) / sn;
+            wa = Mathf.Sin(time * theta) / sn;            //El angulo que ya se recorrio
+            wb = Mathf.Sin((1 - time) * theta) / sn;      //El angulo restante a recorrer
 
             r.x = wa * a.x + wb * b.x;
             r.y = wa * a.y + wb * b.y;
@@ -276,7 +275,8 @@ namespace CustomMath
             result.z = rotAxis.z;
 
             result.w = dot + 1; //Se hace el +1 ya que, sino, vas a tener el quat con el doble de rotacion (ver imagen)
-
+                                // Devuelve entre -1 y 0, entonces le haces + 1 para compensar el rango, y que sea de 0 a 1
+        
             return result.Normalized;
         }
 

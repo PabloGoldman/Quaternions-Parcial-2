@@ -368,7 +368,7 @@ namespace CustomMath
         {
             Matrix4x4 t = Matrix4x4.Translate(translation);
             Matrix4x4 r = Matrix4x4.Rotate(rotation);
-            Matrix4x4 s = Matrix4x4.Scale(scale);
+            Matrix4x4 s = Matrix4x4.Scale(scale);  //Tiene que ser asi ya que se va codificando mediante se lo giras a la placa grafica
 
             return t * r * s;
         }

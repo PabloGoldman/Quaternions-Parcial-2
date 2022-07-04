@@ -42,14 +42,14 @@ public class Respuestas : MonoBehaviour
         switch (ex)   //Literalmente agarra cada vector y lo mueve con el angulo
         {
             case exercise.uno:
-                DisplayVectors(nameof(vectorA));
+                ShowVector(nameof(vectorA));
                 vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
                 VectorDebugger.UpdatePosition(nameof(vectorA), vectorA);
                 break;
             case exercise.dos:
-                DisplayVectors(nameof(vectorA));
-                DisplayVectors(nameof(vectorB));
-                DisplayVectors(nameof(vectorC));
+                ShowVector(nameof(vectorA));
+                ShowVector(nameof(vectorB));
+                ShowVector(nameof(vectorC));
 
                 vectorA = Quat.Euler(new Vec3(0, angle, 0)) * vectorA;
                 vectorB = Quat.Euler(new Vec3(0, angle, 0)) * vectorB;
@@ -60,10 +60,10 @@ public class Respuestas : MonoBehaviour
                 VectorDebugger.UpdatePosition(nameof(vectorC), vectorB, vectorC);
                 break;
             case exercise.tres:
-                DisplayVectors(nameof(vectorA));
-                DisplayVectors(nameof(vectorB));
-                DisplayVectors(nameof(vectorC));
-                DisplayVectors(nameof(vectorD));
+                ShowVector(nameof(vectorA));
+                ShowVector(nameof(vectorB));
+                ShowVector(nameof(vectorC));
+                ShowVector(nameof(vectorD));
 
                 vectorA = Quat.Euler(new Vec3(angle, angle, 0)) * vectorA;
                 vectorC = Quat.Euler(new Vec3(-angle, -angle, 0)) * vectorC;
@@ -92,7 +92,7 @@ public class Respuestas : MonoBehaviour
         VectorDebugger.DisableEditorView(key);
     }
 
-    private void DisplayVectors(string key)
+    private void ShowVector(string key)
     {
         VectorDebugger.TurnOnVector(key);
         VectorDebugger.EnableEditorView(key);
