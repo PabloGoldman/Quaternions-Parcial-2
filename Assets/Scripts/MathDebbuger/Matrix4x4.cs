@@ -7,7 +7,7 @@ namespace CustomMath
 {
     public struct Matrix4x4
     {
-        #region Variables
+        #region Variables  
 
         public float m00;
 
@@ -309,11 +309,7 @@ namespace CustomMath
             return result;
         }
 
-        /// <summary>
-        /// Cambia la escala de <see cref="Matrix4x4"/> en base a un <see cref="Vec3"/>.
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
+        //Cambia la escala de la matriz en base a un vector3
         public static Matrix4x4 Scale(Vec3 vector)
         {
             Matrix4x4 result = default(Matrix4x4);
@@ -336,11 +332,7 @@ namespace CustomMath
             return result;
         }
 
-        /// <summary>
-        /// Cambia el orden de <see cref="Matrix4x4"/>
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <returns></returns>
+        //Hace la inversa, cambia el orden de la matriz
         public static Matrix4x4 Transpose(Matrix4x4 matrix)
         {
             float aux;

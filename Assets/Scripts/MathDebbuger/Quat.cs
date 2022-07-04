@@ -120,15 +120,15 @@ namespace CustomMath
             float sz = Mathf.Sin(Mathf.Deg2Rad * vec3.z / 2);   //xq asi laburan los Quat
 
             float cy = Mathf.Cos(Mathf.Deg2Rad * vec3.y / 2);   //La parte imaginaria se calcula con el seno
-            float sy = Mathf.Sin(Mathf.Deg2Rad * vec3.y / 2);
+            float sy = Mathf.Sin(Mathf.Deg2Rad * vec3.y / 2);   
 
-            float cx = Mathf.Cos(Mathf.Deg2Rad * vec3.x / 2);
+            float cx = Mathf.Cos(Mathf.Deg2Rad * vec3.x / 2);  //Estas son las rotaciones de cada eje
             float sx = Mathf.Sin(Mathf.Deg2Rad * vec3.x / 2);
 
             Quat quat = new Quat();    
 
             quat.w = cx * cy * cz + sx * sy * sz;   //Se le agregan las rotaciones de cada eje, multiplicandolas, ya que es la forma de aplicar rotaciones
-            quat.x = sx * cy * cz - cx * sy * sz;
+            quat.x = sx * cy * cz - cx * sy * sz;   
             quat.y = cx * sy * cz + sx * cy * sz;
             quat.z = cx * cy * sz - sx * sy * cz;
 
@@ -136,7 +136,7 @@ namespace CustomMath
         }
 
         //De quat a vec3
-        private static Vec3 ToEulerAngles(Quat quat)
+        private static Vec3 ToEulerAngles(Quat quat) //Si no me equivoco, el de unity tiene gimbal lock
         {
             Vec3 angles;
 
@@ -146,14 +146,15 @@ namespace CustomMath
             angles.x = Mathf.Atan2(sinr_cosp, cosr_cosp);
 
             // pitch (y-axis rotation)
-            float sinp = 2 * (quat.w * quat.y - quat.z * quat.x);    //Ojo por el gimbal lock (FOTO)
+            float sinp = 2 * (quat.w * quat.y - quat.z * quat.x);    //Ojo por el gimbal lock (EXPLICO EN UNITY)
+
             if (Mathf.Abs(sinp) >= 1)
                 angles.y = (Mathf.PI / 2) * Mathf.Sign(sinp); // use 90 degrees if out of range
             else
                 angles.y = Mathf.Asin(sinp);
 
             // yaw / z
-            float siny_cosp = 2 * (quat.w * quat.z + quat.x * quat.y);
+            float siny_cosp = 2 * (quat.w * quat.z + quat.x * quat.y);  //Se aplican en desorden las rotaciones, quiso q le queden como en wiki xd
             float cosy_cosp = 1 - 2 * (quat.y * quat.y + quat.z * quat.z);
             angles.z = Mathf.Atan2(siny_cosp, cosy_cosp);
 
@@ -223,12 +224,12 @@ namespace CustomMath
 
             if (theta < 0)
             {
-                theta = -theta; //Lo invertis, o sea si tenes -30 grados, seria 30 grados
+                theta = -theta; //Lo invertis, o sea si tenes -30 grados, seria 30 grados, sacas el absoluto
             }
 
             float sn = Mathf.Sin(theta);
 
-            wa = Mathf.Sin(time * theta) / sn; 
+            wa = Mathf.Sin(time * theta) / sn;   
             wb = Mathf.Sin((1 - time) * theta) / sn;
 
             r.x = wa * a.x + wb * b.x;

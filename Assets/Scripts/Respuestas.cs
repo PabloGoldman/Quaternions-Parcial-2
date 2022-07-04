@@ -37,7 +37,7 @@ public class Respuestas : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        switch (ex)
+        switch (ex)   //Literalmente agarra cada vector y lo mueve con el angulo
         {
             case exercise.uno:
                 DisplayVectors(nameof(vectorA));
