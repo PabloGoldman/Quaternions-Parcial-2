@@ -37,6 +37,8 @@ public class Respuestas : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        HideAllVectors();
+
         switch (ex)   //Literalmente agarra cada vector y lo mueve con el angulo
         {
             case exercise.uno:
@@ -74,6 +76,20 @@ public class Respuestas : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void HideAllVectors()
+    {
+        HideVector(nameof(vectorA));
+        HideVector(nameof(vectorB));
+        HideVector(nameof(vectorC));
+        HideVector(nameof(vectorD));
+    }
+
+    private void HideVector(string key)
+    {
+        VectorDebugger.TurnOffVector(key);
+        VectorDebugger.DisableEditorView(key);
     }
 
     private void DisplayVectors(string key)
