@@ -111,22 +111,23 @@ namespace CustomMath
 
         public static Quat Euler(float x, float y, float z) => ToQuaternion(new Vec3(x, y, z) * Mathf.Deg2Rad);
 
-        //public static Quat Euler(Vec3 euler) => ToQuaternion(euler * Mathf.Deg2Rad);
         public static Quat Euler(Vec3 euler) => ToQuaternion(euler);
 
         //De vec3 a Quat
         private static Quat ToQuaternion(Vec3 vec3) // yaw (Z), pitch (Y), roll (X)
         {
-            float cz = Mathf.Cos(Mathf.Deg2Rad * vec3.z / 2);
-            float sz = Mathf.Sin(Mathf.Deg2Rad * vec3.z / 2);
-            float cy = Mathf.Cos(Mathf.Deg2Rad * vec3.y / 2);
+            float cz = Mathf.Cos(Mathf.Deg2Rad * vec3.z / 2);   //La parte real del Quat se calcula con el coseno de la mitad del angulo, pasado a radianes 
+            float sz = Mathf.Sin(Mathf.Deg2Rad * vec3.z / 2);   //xq asi laburan los Quat
+
+            float cy = Mathf.Cos(Mathf.Deg2Rad * vec3.y / 2);   //La parte imaginaria se calcula con el seno
             float sy = Mathf.Sin(Mathf.Deg2Rad * vec3.y / 2);
+
             float cx = Mathf.Cos(Mathf.Deg2Rad * vec3.x / 2);
             float sx = Mathf.Sin(Mathf.Deg2Rad * vec3.x / 2);
 
-            Quat quat = new Quat();
+            Quat quat = new Quat();    
 
-            quat.w = cx * cy * cz + sx * sy * sz;
+            quat.w = cx * cy * cz + sx * sy * sz;   //Se le agregan las rotaciones de cada eje, multiplicandolas, ya que es la forma de aplicar rotaciones
             quat.x = sx * cy * cz - cx * sy * sz;
             quat.y = cx * sy * cz + sx * cy * sz;
             quat.z = cx * cy * sz - sx * sy * cz;
@@ -145,7 +146,7 @@ namespace CustomMath
             angles.x = Mathf.Atan2(sinr_cosp, cosr_cosp);
 
             // pitch (y-axis rotation)
-            float sinp = 2 * (quat.w * quat.y - quat.z * quat.x);
+            float sinp = 2 * (quat.w * quat.y - quat.z * quat.x);    //Ojo por el gimbal lock (FOTO)
             if (Mathf.Abs(sinp) >= 1)
                 angles.y = (Mathf.PI / 2) * Mathf.Sign(sinp); // use 90 degrees if out of range
             else
@@ -275,7 +276,7 @@ namespace CustomMath
             result.y = rotAxis.y;
             result.z = rotAxis.z;
 
-            result.w = dot + 1; //Se hace el +1 ya que, sino, vas a tener el quat con el doble de rotacion 
+            result.w = dot + 1; //Se hace el +1 ya que, sino, vas a tener el quat con el doble de rotacion (ver imagen)
 
             return result.Normalized;
         }
